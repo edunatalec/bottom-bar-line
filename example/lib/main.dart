@@ -21,6 +21,13 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomBarLine();
+    return Scaffold(
+      body: Center(
+        child: Text('Mãe do Eduardo <3'),
+      ),
+      bottomNavigationBar: BottomBarLine(
+        background: Colors.blueGrey.shade800,
+      ),
+    );
   }
 }
