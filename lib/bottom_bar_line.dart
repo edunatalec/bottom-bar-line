@@ -22,13 +22,6 @@ class _BottomBarLineState extends State<BottomBarLine> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      // bottomNavigationBar: Container(
-      //   color: Colors.red,
-      //   height: 56 + MediaQuery.of(context).padding.bottom,
-      //   child: Row(
-      //     children: [],
-      //   ),
-      // ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
