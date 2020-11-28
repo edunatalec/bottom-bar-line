@@ -1,14 +1,47 @@
-# bottom_bar_line
+# BottomBarLine
 
-A new Flutter package project.
+A bottom navigation bar with a beautiful effect.
 
-## Getting Started
+## Preview
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## Properties
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+```dart
+final List<BottomBarLineItem> items;
+final Color backgroundColor;
+
+/// Called when one of the [items] is pressed.
+final Function(int) onTap;
+
+/// The current index of [items] (active)
+final int currentIndex;
+
+/// The circle diameter
+final double circleSize;
+
+/// If it has the snake effect
+final bool hasLineEffect;
+
+/// If the icon goes up
+final bool iconJump;
+
+/// The animation duration
+final Duration duration;
+
+final Color splashColor;
+final Color highlightColor;
+
+BottomBarLine({
+  Key key,
+  @required this.onTap,
+  @required this.items,
+  this.backgroundColor = Colors.transparent,
+  this.circleSize = 6,
+  this.currentIndex = 0,
+  this.hasLineEffect = true,
+  this.duration = const Duration(milliseconds: 180),
+  this.splashColor,
+  this.highlightColor,
+  this.iconJump = true,
+}) : super(key: key);
+```

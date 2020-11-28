@@ -8,6 +8,7 @@ class BottomBarLineItemButton extends StatelessWidget {
   final Color splashColor;
   final Color highlightColor;
   final Duration duration;
+  final bool iconJump;
 
   BottomBarLineItemButton({
     @required this.item,
@@ -16,6 +17,7 @@ class BottomBarLineItemButton extends StatelessWidget {
     this.isActive = false,
     this.splashColor,
     this.highlightColor,
+    this.iconJump,
   });
 
   @override
@@ -40,13 +42,15 @@ class BottomBarLineItemButton extends StatelessWidget {
 
     return Expanded(
       child: Stack(
+        fit: StackFit.expand,
         children: [
-          Container(
-            height: 56,
-            child: Center(
-              child: icon,
-            ),
-          ),
+          iconJump
+              ? AnimatedAlign(
+                  duration: duration,
+                  alignment: isActive ? Alignment(0, -.2) : Alignment.center,
+                  child: icon,
+                )
+              : icon,
           Positioned.fill(
             child: Material(
               color: Colors.transparent,

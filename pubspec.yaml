@@ -1,8 +1,8 @@
 name: bottom_bar_line
-description: A new Flutter package project.
-version: 0.0.1
-author:
-homepage:
+description: A bottom navigation bar with a beautiful effect.
+version: 0.1.0
+author: Eduardo Natale Costa <eduardon.work@gmail.com>
+homepage: https://github.com/EduardoNatale/bottom-bar-line
 
 environment:
   sdk: ">=2.7.0 <3.0.0"

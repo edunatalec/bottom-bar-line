@@ -7,13 +7,27 @@ import 'bottom_bar_line_item.dart';
 import 'bottom_bar_line_item_button.dart';
 
 class BottomBarLine extends StatefulWidget {
-  final Color backgroundColor;
-  final Function(int) onTap;
-  final int currentIndex;
-  final double circleSize;
   final List<BottomBarLineItem> items;
+  final Color backgroundColor;
+
+  /// Called when one of the [items] is pressed.
+  final Function(int) onTap;
+
+  /// The current index of [items] (active)
+  final int currentIndex;
+
+  /// The circle diameter
+  final double circleSize;
+
+  /// If it has the snake effect
   final bool hasLineEffect;
+
+  /// If the icon goes up
+  final bool iconJump;
+
+  /// The animation duration
   final Duration duration;
+
   final Color splashColor;
   final Color highlightColor;
 
@@ -28,6 +42,7 @@ class BottomBarLine extends StatefulWidget {
     this.duration = const Duration(milliseconds: 180),
     this.splashColor,
     this.highlightColor,
+    this.iconJump = true,
   }) : super(key: key);
 
   @override
@@ -52,6 +67,7 @@ class _BottomBarLineState extends State<BottomBarLine> {
 
     leftPadding = (maxSize / 2) - minSize / 2;
 
+    // The index is not 0 always
     distance = widget.currentIndex * maxDistance;
   }
 
@@ -67,6 +83,11 @@ class _BottomBarLineState extends State<BottomBarLine> {
 
   @override
   Widget build(BuildContext context) {
+    // The MediaQuery.of(context).size.width can change
+    maxSize =
+        maxDistance = MediaQuery.of(context).size.width / widget.items.length;
+    leftPadding = (maxSize / 2) - minSize / 2;
+
     return SizedBox(
       height: 56 + MediaQuery.of(context).padding.bottom,
       child: Stack(
@@ -85,6 +106,7 @@ class _BottomBarLineState extends State<BottomBarLine> {
                       highlightColor: widget.highlightColor,
                       splashColor: widget.splashColor,
                       duration: widget.duration,
+                      iconJump: widget.iconJump,
                     ),
                   )
                   .toList(),
