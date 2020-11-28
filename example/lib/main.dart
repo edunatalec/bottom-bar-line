@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Example",
+      // theme: ThemeData.dark(),
       home: HomeScreen(),
     );
   }
@@ -45,21 +46,21 @@ class _HomeScreenState extends State<HomeScreen> {
             constraints: BoxConstraints.expand(),
             color: Colors.red,
             child: Center(
-              child: Text('Page 1'),
+              child: Text('PAGE 1'),
             ),
           ),
           Container(
             constraints: BoxConstraints.expand(),
             color: Colors.blue,
             child: Center(
-              child: Text('Page 2'),
+              child: Text('PAGE 2'),
             ),
           ),
           Container(
             constraints: BoxConstraints.expand(),
             color: Colors.orange,
             child: Center(
-              child: Text('Page 3'),
+              child: Text('PAGE 3'),
             ),
           ),
         ],
@@ -72,30 +73,31 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
       bottomNavigationBar: BottomBarLine(
-        background: Colors.transparent,
         currentIndex: currentPage,
         onTap: (int index) {
-          pageController.animateToPage(
-            index,
-            duration: Duration(milliseconds: 360),
-            curve: Curves.fastOutSlowIn,
-          );
-          setState(() {
-            currentPage = index;
-          });
+          if (index != currentPage) {
+            pageController.animateToPage(
+              index,
+              duration: Duration(milliseconds: 360),
+              curve: Curves.fastOutSlowIn,
+            );
+            setState(() {
+              currentPage = index;
+            });
+          }
         },
         items: [
           BottomBarLineItem(
             icon: Icon(Icons.home),
-            color: Colors.red,
+            selectedColor: Colors.red,
           ),
           BottomBarLineItem(
             icon: Icon(Icons.library_books),
-            color: Colors.blue,
+            selectedColor: Colors.blue,
           ),
           BottomBarLineItem(
             icon: Icon(Icons.headset),
-            color: Colors.orange,
+            selectedColor: Colors.orange,
           ),
         ],
       ),
