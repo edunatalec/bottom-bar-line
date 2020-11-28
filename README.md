@@ -1,5 +1,7 @@
 # BottomBarLine
 
+[![Pub](https://img.shields.io/pub/v/bottom_bar_line.svg)](https://pub.dev/packages/bottom_bar_line)
+
 A bottom navigation bar with a beautiful effect.
 
 ## Preview
