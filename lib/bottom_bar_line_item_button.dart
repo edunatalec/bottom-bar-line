@@ -5,20 +5,30 @@ class BottomBarLineItemButton extends StatelessWidget {
   final BottomBarLineItem item;
   final Function onTap;
   final bool isActive;
+  final Color splashColor;
+  final Color highlightColor;
+  final Duration duration;
 
   BottomBarLineItemButton({
     @required this.item,
     @required this.onTap,
+    @required this.duration,
     this.isActive = false,
+    this.splashColor,
+    this.highlightColor,
   });
 
   @override
   Widget build(BuildContext context) {
-    final newIcon = TweenAnimationBuilder(
-      duration: Duration(milliseconds: 360),
+    final icon = TweenAnimationBuilder(
+      duration: Duration(milliseconds: duration.inMilliseconds * 2),
       curve: Curves.fastOutSlowIn,
       tween: ColorTween(
-          begin: item.icon.color, end: isActive ? item.color :( item.icon.color ?? Colors.grey.shade500 )),
+        begin: item.icon.color,
+        end: isActive
+            ? item.selectedColor
+            : (item.icon.color ?? Theme.of(context).iconTheme.color),
+      ),
       builder: (_, color, __) {
         return Icon(
           item.icon.icon,
@@ -26,10 +36,6 @@ class BottomBarLineItemButton extends StatelessWidget {
           size: item.icon.size,
         );
       },
-//      iconData: item.icon.icon,
-//      color: isActive ? item.color : (item.icon.color ?? Colors.grey.shade500),
-//      color: 10.2,
-//      size: item.icon.size,
     );
 
     return Expanded(
@@ -38,38 +44,22 @@ class BottomBarLineItemButton extends StatelessWidget {
           Container(
             height: 56,
             child: Center(
-              child: newIcon,
+              child: icon,
             ),
           ),
           Positioned.fill(
-              child: Material(
-            color: Colors.transparent,
-            child: InkWell(
-              onTap: onTap,
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                onTap: onTap,
+                splashColor: splashColor ?? Theme.of(context).splashColor,
+                highlightColor:
+                    highlightColor ?? Theme.of(context).highlightColor,
+              ),
             ),
-          ))
+          )
         ],
       ),
     );
   }
 }
-
-//class AnimatedColorIcon extends AnimatedWidget {
-//  const AnimatedColorIcon({color}) : super(listenable: color);
-//
-//  Animation<double> get color => listenable;
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return Container(
-//      width: 20,
-//      height: color.value,
-//      color: Colors.red.shade50,
-//    );
-////    return Icon(
-////      iconData,
-////      color: color.value,
-////      size: size,
-////    );
-//  }
-//}

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:matrix4_transform/matrix4_transform.dart';
 
@@ -5,43 +7,49 @@ import 'bottom_bar_line_item.dart';
 import 'bottom_bar_line_item_button.dart';
 
 class BottomBarLine extends StatefulWidget {
-  final Color background;
+  final Color backgroundColor;
   final Function(int) onTap;
   final int currentIndex;
   final double circleSize;
   final List<BottomBarLineItem> items;
+  final bool hasLineEffect;
+  final Duration duration;
+  final Color splashColor;
+  final Color highlightColor;
 
   BottomBarLine({
     Key key,
-    @required this.background,
     @required this.onTap,
     @required this.items,
+    this.backgroundColor = Colors.transparent,
     this.circleSize = 6,
     this.currentIndex = 0,
-  }) : super(key: key) {
-//    assert(items.length);
-  }
+    this.hasLineEffect = true,
+    this.duration = const Duration(milliseconds: 180),
+    this.splashColor,
+    this.highlightColor,
+  }) : super(key: key);
 
   @override
   _BottomBarLineState createState() => _BottomBarLineState();
 }
 
 class _BottomBarLineState extends State<BottomBarLine> {
-  double maxSize = 0,
-      maxDistance = 0,
-      leftPadding = 0,
-      minSize = 0,
-      size = 0,
-      distance = 0;
+  bool isAnimating = false;
+  bool isForward = false;
+
+  double maxSize, maxDistance, leftPadding, minSize, size, distance;
 
   @override
   void initState() {
     super.initState();
 
     minSize = size = widget.circleSize;
+
     maxSize = maxDistance =
         MediaQuery.of(Scaffold.of(context).context).size.width /
             widget.items.length;
+
     leftPadding = (maxSize / 2) - minSize / 2;
 
     distance = widget.currentIndex * maxDistance;
@@ -49,46 +57,66 @@ class _BottomBarLineState extends State<BottomBarLine> {
 
   @override
   void didUpdateWidget(BottomBarLine oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
     changeValues(
       currentDistance: oldWidget.currentIndex * maxDistance,
       newDistance: widget.currentIndex * maxDistance,
     );
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 56,
+    return SizedBox(
+      height: 56 + MediaQuery.of(context).padding.bottom,
       child: Stack(
         children: [
           Container(
-            height: 56 + MediaQuery.of(context).padding.bottom,
-            color: widget.background,
+            color: widget.backgroundColor,
             child: Row(
               children: widget.items
                   .asMap()
                   .entries
-                  .map<Widget>((item) => BottomBarLineItemButton(
-                        item: item.value,
-                        isActive: widget.currentIndex == item.key,
-                        onTap: () => widget.onTap(item.key),
-                      ))
+                  .map<Widget>(
+                    (item) => BottomBarLineItemButton(
+                      item: item.value,
+                      isActive: widget.currentIndex == item.key,
+                      onTap: isAnimating ? () {} : () => widget.onTap(item.key),
+                      highlightColor: widget.highlightColor,
+                      splashColor: widget.splashColor,
+                      duration: widget.duration,
+                    ),
+                  )
                   .toList(),
             ),
           ),
           Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 4.0),
+              padding: const EdgeInsets.only(bottom: 4),
               child: AnimatedContainer(
                 curve: Curves.fastOutSlowIn,
-                duration: Duration(milliseconds: 180),
+                duration: widget.duration,
                 height: minSize,
                 width: size,
                 decoration: BoxDecoration(
-                  color: widget.items[widget.currentIndex].color,
+                  color: widget.items[widget.currentIndex].selectedColor,
                   borderRadius: BorderRadius.circular(minSize / 2),
+                  gradient: LinearGradient(
+                    begin: isForward
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
+                    end: isForward
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    colors: [
+                      widget.items[widget.currentIndex].selectedColor
+                          .withOpacity(isAnimating ? .4 : 1),
+                      widget.items[widget.currentIndex].selectedColor
+                          .withOpacity(isAnimating ? .7 : 1),
+                      widget.items[widget.currentIndex].selectedColor,
+                    ],
+                  ),
                 ),
                 transform: Matrix4Transform()
                     .directionDegrees(0, distance + leftPadding)
@@ -102,30 +130,33 @@ class _BottomBarLineState extends State<BottomBarLine> {
   }
 
   void changeValues({double currentDistance, double newDistance}) async {
-    // forward
     if (newDistance > currentDistance) {
       setState(() {
+        isAnimating = true;
+        isForward = true;
         this.size = (newDistance - currentDistance);
       });
 
-      await Future.delayed(Duration(milliseconds: 180));
+      if (widget.hasLineEffect) await Future.delayed(widget.duration);
 
       setState(() {
         this.size = minSize;
         this.distance = newDistance;
+        isAnimating = false;
       });
-    }
-    // backward
-    else if (newDistance < currentDistance) {
+    } else if (newDistance < currentDistance) {
       setState(() {
+        isAnimating = true;
+        isForward = false;
         this.distance = newDistance;
         this.size = (currentDistance - newDistance);
       });
 
-      await Future.delayed(Duration(milliseconds: 180));
+      if (widget.hasLineEffect) await Future.delayed(widget.duration);
 
       setState(() {
         this.size = minSize;
+        isAnimating = false;
       });
     }
   }

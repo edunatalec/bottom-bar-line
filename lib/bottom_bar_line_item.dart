@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class BottomBarLineItem {
   final Icon icon;
-  final Color color;
+  final Color selectedColor;
 
   BottomBarLineItem({
     @required this.icon,
-    @required this.color,
+    @required this.selectedColor,
   });
 }
