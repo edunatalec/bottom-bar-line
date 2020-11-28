@@ -4,6 +4,14 @@ A bottom navigation bar with a beautiful effect.
 
 ## Preview
 
+<img src="https://raw.githubusercontent.com/EduardoNatale/bottom-bar-line/master/preview/bottom-bar-line.gif" height="300em">
+
+## Inspiration
+
+<img src="https://cdn.dribbble.com/users/227277/screenshots/5354464/tabbar2.gif" height="300em">
+
+[Link](https://dribbble.com/shots/5354464-Tab-bar)
+
 ## Properties
 
 ```dart
